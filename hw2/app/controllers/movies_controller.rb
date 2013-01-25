@@ -8,7 +8,10 @@ class MoviesController < ApplicationController
 
   def index
     @sort_field = params[:sort]
-    @movies = Movie.order(@sort_field)
+    @ratings    = params[:ratings] || Movie::RATINGS
+
+    @all_ratings = Movie::RATINGS
+    @movies = Movie.order(@sort_field).filter_by_rating(@ratings)
   end
 
   def new
