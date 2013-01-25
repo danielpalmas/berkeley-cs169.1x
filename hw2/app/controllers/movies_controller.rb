@@ -7,8 +7,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @sort_field = params[:sort]
-    @ratings    = params[:ratings] || Movie::RATINGS
+    session_params = session.to_hash.slice('sort', 'ratings')
+
+    if params.slice(:sort, :ratings).empty? && session_params.any?
+      flash.keep
+      redirect_to movies_path(session_params)
+    end
+
+    session[:sort]    = params[:sort]    if params[:sort].present?
+    session[:ratings] = params[:ratings] if params[:ratings].present?
+
+    @sort_field = session[:sort]
+    @ratings    = session[:ratings] || Movie::RATINGS
 
     @all_ratings = Movie::RATINGS
     @movies = Movie.order(@sort_field).filter_by_rating(@ratings)
