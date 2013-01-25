@@ -1,1 +1,1 @@
-http://berkleycs1691x.herokuapp.com
+http://berkeley-cs1691x.herokuapp.com
